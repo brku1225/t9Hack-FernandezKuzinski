@@ -79,6 +79,7 @@ int main()
     string name;
     string major;
     bulkAdd(person, filename, username, name, major, indoor, outdoor);
+    cout << endl;
     cout << "Welcome to Buffsearch, please enter the following info and we will find others like you!" << endl;
     while(count != 5)
     {
@@ -104,9 +105,11 @@ int main()
                 person.printSimilarNode(node);
             }
         break;
-        case 2:cout << "Enter a Username: ";
+
+        case 2:
+            cout << "Enter a Username: ";
             cin >> username;
-            /*while(node == NULL)
+            do
             {
                 node = person.searchUsername(username);
                 if(node != NULL)
@@ -114,15 +117,16 @@ int main()
                     cout << "User already exists, enter another username: " << endl;
                     cin >> username;
                 }
-            }*/
+            }while(node != NULL);
             cout << endl;
+            cout << "Enter your Name: ";
+            getline(cin, name);
             do
             {
-                cout << "Enter your Name: ";
-                getline(cin, name);
                 if(name == "")
                 {
                     cout << "Please input a name." << endl;
+                    getline(cin, name);
                 }
             } while (name == "");
             cout << endl;
@@ -155,6 +159,7 @@ int main()
                 cout << "Your User has been added to the directory!" << endl;
             }
         break;
+
         case 3: cout << "Enter a Username: ";
             cin >> username;
             node = person.searchUsername(username); // figure this out\if(node == NULL)
@@ -165,8 +170,10 @@ int main()
             else{
                 person.similarNode(NULL, node->username, node->name, node->major, node->indoor, node->outdoor);
             }
+        break;
         case 4: person.print();
         break;
+
         case 5: cout << "Thanks for using our services, we will now proceed to hack your computer. Have a lovely day!" << endl;
             cout << endl;
         break;
