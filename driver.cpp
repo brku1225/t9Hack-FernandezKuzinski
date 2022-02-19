@@ -44,14 +44,12 @@ int main()
         cout << "Enter your Major: ";
         cin >> major;
         cout << endl;
-        int i = 0;
         while(indoor.back() != "n")
         {
             cout << "Enter an indoor hobbie that you like to do: ";
             cin >> some;
             cout << endl;
             indoor.push_back(some);
-            i++;
         }
         while(outdoor.back() != "n")
         {
@@ -59,7 +57,6 @@ int main()
             cin >> some;
             cout << endl;
             indoor.push_back(some);
-            i++;
         }
         indoor.pop_back();
         outdoor.pop_back();
@@ -75,7 +72,7 @@ int main()
         else{
             person.similarNode(NULL, node->username, node->name, node->major, node->indoor, node->outdoor);
         }
-    default:
+    default: cout << "Wrong input, please try again." << endl;
         break;
     }
 
