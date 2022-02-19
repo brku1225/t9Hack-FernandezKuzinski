@@ -27,6 +27,8 @@ class PersonTree{
         void similarNodeHelper(PersonNode*, string, string, string, vector<string>, vector<string>);
         void similarNode(PersonNode*, string, string, string, vector<string>, vector<string>); // finding node similar to you
         string searchTree(PersonNode*, string); // searching tree by name (find you in tree)
+        void searchMajorHelper(PersonNode*, string, string);
+        void searchMajor(string, string); // searching for a person in your major
         void printSimilarNode(PersonNode*); // printing node info
         void print();
 };

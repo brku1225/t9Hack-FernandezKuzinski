@@ -149,6 +149,24 @@
     {
         similarNodeHelper(root, username, name, major, indoor, outdoor);
     }
+    void PersonTree::searchMajorHelper(PersonNode* node, string major, string username)
+    {
+        if(node == NULL)
+        {
+            return;
+        }
+        else if(node->major == major && node->username != username)
+        {
+            cout << "The following user has the same major." << endl;
+            printSimilarNode(node);
+        }
+        searchMajorHelper(node->left, major, username);
+        searchMajorHelper(node->right, major, username);
+    }
+    void PersonTree::searchMajor(string major, string username)
+    {
+        searchMajorHelper(root, major, username);
+    }
     void PersonTree::printSimilarNode(PersonNode* node) // printing node info
     {
         cout << "------------------------------------------------------" << endl;

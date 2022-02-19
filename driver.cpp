@@ -81,14 +81,15 @@ int main()
     bulkAdd(person, filename, username, name, major, indoor, outdoor);
     cout << endl;
     cout << "Welcome to Buffsearch, please enter the following info and we will find others like you!" << endl;
-    while(count != 5)
+    while(count != 6)
     {
         cout << endl;
         cout << "1. Search for User" << endl;
         cout << "2. Add User" << endl;
         cout << "3. Find Similar Users" << endl;
-        cout << "4. Show all Users" << endl;
-        cout << "5. Exit" << endl;
+        cout << "4. Find Users with same Major" << endl;
+        cout << "5. Show all Users" << endl;
+        cout << "6. Exit" << endl;
         cin >> count;
         cout << endl;
         switch (count)
@@ -135,24 +136,24 @@ int main()
             cout << endl;
             do
             {
-                cout << "Enter an indoor hobbie that you like to do (enter 'n' to stop): ";
+                cout << "Enter an indoor hobbie that you like to do (enter 'n' to stop, please enter at least 1): ";
                 getline(cin, some);
                 cout << endl;
                 if(some != "n")
                 {
                     indoor.push_back(some);
                 }
-            }while(some != "n");
+            }while(some != "n" && outdoor.size() != 0);
             do
             {
-                cout << "Enter an outdoor hobbie that you like to do (enter 'n' to stop): ";
+                cout << "Enter an outdoor hobbie that you like to do (enter 'n' to stop, please enter at least 1): ";
                 getline(cin, some);
                 cout << endl;
                 if(some != "n")
                 {
                     outdoor.push_back(some);
                 }
-            }while(some != "n");
+            }while(some != "n" && outdoor.size() != 0);
             person.addtoPersonTree(username, name, major, indoor, outdoor);
             if(node != NULL)
             {
@@ -171,10 +172,23 @@ int main()
                 person.similarNode(NULL, node->username, node->name, node->major, node->indoor, node->outdoor);
             }
         break;
-        case 4: person.print();
+
+        case 4: cout << "Enter a username to search for: ";
+            cin >> username;
+            node = person.searchUsername(username);
+            if(node == NULL)
+            {
+                cout << "User does not exist." << endl;
+            }
+            else{
+                person.searchMajor(node->major, node->username);
+            }
         break;
 
-        case 5: cout << "Thanks for using our services, we will now proceed to hack your computer. Have a lovely day!" << endl;
+        case 5: person.print();
+        break;
+
+        case 6: cout << "Thanks for using our services, we will now proceed to hack your computer. Have a lovely day!" << endl;
             cout << endl;
         break;
 
