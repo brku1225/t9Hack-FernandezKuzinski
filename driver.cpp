@@ -4,7 +4,7 @@ using namespace std;
 
 int main()
 {
-    int n = -1;
+    PersonNode* node = NULL;
     int count = 0;
     string some;
     PersonTree person;
@@ -21,37 +21,62 @@ int main()
     {
     case 1: cout << "Enter a username to search for: ";
         cin >> username;
-        n = person.searchUsername(username);
+        node = person.searchUsername(username);
+        if(node == NULL)
+        {
+            cout << "User does not exist." << endl;
+        }
         break;
-    
+    case 2:cout << "Enter a Username:" << endl;
+        cin >> username;
+        while(node == NULL)
+        {
+            node = person.searchUsername(username);
+            if(node != NULL)
+            {
+                cout << "User already exists, enter another username: " << endl;
+                cin >> username;
+            }
+        }
+        cout << "Enter your Name: ";
+        cin >> name;
+        cout << endl;
+        cout << "Enter your Major: ";
+        cin >> major;
+        cout << endl;
+        int i = 0;
+        while(indoor.back() != "n")
+        {
+            cout << "Enter an indoor hobbie that you like to do: ";
+            cin >> some;
+            cout << endl;
+            indoor.push_back(some);
+            i++;
+        }
+        while(outdoor.back() != "n")
+        {
+            cout << "Enter an indoor hobbie that you like to do: ";
+            cin >> some;
+            cout << endl;
+            indoor.push_back(some);
+            i++;
+        }
+        indoor.pop_back();
+        outdoor.pop_back();
+        person.addtoPersonTree(NULL, username, name, major, indoor, outdoor);
+    break;
+    case 3: cout << "Enter a Username: ";
+        cin >> username;
+        node = person.searchUsername(username); // figure this out\if(node == NULL)
+        if(node == NULL)
+        {
+            cout << "User does not exist." << endl;
+        }
+        else{
+            person.similarNode(NULL, node->username, node->name, node->major, node->indoor, node->outdoor);
+        }
     default:
         break;
-    }
-    cout << "Enter a Username:" << endl;
-    cin >> username;
-    while(n == -1)
-    {
-        n = person.searchUsername(username);
-        if(n == -1)
-        {
-            cout << "This Username is already taken, please enter a new one:" << endl;
-            cin >> username;
-        }
-    }
-    cout << "Enter your Name: ";
-    cin >> name;
-    cout << endl;
-    cout << "Enter your Major: ";
-    cin >> major;
-    cout << endl;
-    int i = 0;
-    while(indoor.back() != "n")
-    {
-        cout << "Enter an indoor hobbie that you like to do: ";
-        cin >> some;
-        cout << endl;
-        indoor.push_back(some);
-        i++;
     }
 
     return 0;
