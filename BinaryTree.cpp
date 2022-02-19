@@ -49,7 +49,7 @@
         PersonNode* some = helperUsername(root, username);
         return some;
     }
-    PersonNode* addHelper(PersonNode* node, string username, string name, string major, vector<string> indoor, vector<string>outdoor)
+    PersonNode* addHelper(PersonNode* node, string username, string name, string major, vector<string> indoor, vector<string>outdoor, vector<string> activities)
     {
         if(node == NULL)
         {
@@ -59,28 +59,30 @@
             person->major = major;
             person->indoor = indoor;
             person->outdoor = outdoor;
+            person->activities = activities;
             person->left = NULL;
             person->right = NULL;
             return person;
         }
         else if(username < node->username)
         {
-            node->left = addHelper(node->left, username, name, major, indoor, outdoor);
+            node->left = addHelper(node->left, username, name, major, indoor, outdoor, activities);
         }
         else if(username > node->username)
         {
-            node->right = addHelper(node->right, username, name, major, indoor, outdoor);
+            node->right = addHelper(node->right, username, name, major, indoor, outdoor, activities);
         }
         return node;
     }
-    void PersonTree::addtoPersonTree(string username, string name, string major, vector<string> indoor, vector<string> outdoor) // adding node to tree
+    void PersonTree::addtoPersonTree(string username, string name, string major, vector<string> indoor, vector<string> outdoor, vector<string> activities) // adding node to tree
     {
-        root = addHelper(root, username, name, major, indoor, outdoor);
+        root = addHelper(root, username, name, major, indoor, outdoor, activities);
     }
 
-    int isSimilar(PersonNode* currNode, vector<string> indoor, vector<string> outdoor)
+    int isSimilar(PersonNode* currNode, vector<string> indoor, vector<string> outdoor, vector<string> activities)
     {
         int similar = 0;
+        int act = 0;
         for(int i = 0; i < indoor.size(); i++)
         {
             for(int j = i; j < indoor.size(); j++)
@@ -101,7 +103,21 @@
                 }
             }
         }
-        if(outdoor.size() > indoor.size() && currNode->outdoor.size() >= currNode->indoor.size() && similar > 1)
+        for(int i = 0; i < activities.size(); i++)
+        {
+            for(int j = i; j < activities.size(); j++)
+            {
+                if(activities[i] == currNode->outdoor[j])
+                {
+                    act++;
+                }
+            }
+        }
+        if(act > 0)
+        {
+            return -3;
+        }
+        else if(outdoor.size() > indoor.size() && currNode->outdoor.size() >= currNode->indoor.size() && similar > 1)
         {
             return -1;
         }
@@ -116,7 +132,7 @@
         }
         return similar;
     }
-    void PersonTree::similarNodeHelper(PersonNode* node, string username, string name, string major, vector<string>indoor, vector<string> outdoor)
+    void PersonTree::similarNodeHelper(PersonNode* node, string username, string name, string major, vector<string>indoor, vector<string> outdoor, vector<string> activities)
     {
         if(node == NULL)
         {
@@ -124,17 +140,23 @@
         }
         if(node->username != username)
         {
-            int similar = isSimilar(node, indoor, outdoor);
-            if(similar == -1)
+            int similar = isSimilar(node, indoor, outdoor, activities);
+            if(similar == -3)
             {
-                cout << "The following individual has similar interests to you!" << endl;
-                cout << "------You Both like Outdoors Activities more than Indoors---------" << endl;
+                cout << "The following individual is in the same activity as you!" << endl;
+                cout << "--------------------------------------------------------------" << endl;
+                printSimilarNode(node);
+            }
+            else if(similar == -1)
+            {
+                cout << "The following individual has similar outdoor interests to you!" << endl;
+                cout << "--------------------------------------------------------------" << endl;
                 printSimilarNode(node);
             }
             else if(similar == -2)
             {
-                cout << "The following individual has similar interests to you!" << endl;
-                cout << "------You Both like Indoors Activities more than Outdoors---------" << endl;
+                cout << "The following individual has similar indoor interests to you!" << endl;
+                cout << "-------------------------------------------------------------" << endl;
                 printSimilarNode(node);
             }
             else if(similar >= 1)
@@ -142,12 +164,12 @@
                 printSimilarNode(node);
             }
         }
-        similarNodeHelper(node->left, username, name, major, indoor, outdoor);
-        similarNodeHelper(node->right, username, name, major, indoor, outdoor);
+        similarNodeHelper(node->left, username, name, major, indoor, outdoor, activities);
+        similarNodeHelper(node->right, username, name, major, indoor, outdoor, activities);
     }
-    void PersonTree::similarNode(PersonNode* node, string username, string name, string major, vector<string> indoor, vector<string> outdoor) // finding node similar to you
+    void PersonTree::similarNode(PersonNode* node, string username, string name, string major, vector<string> indoor, vector<string> outdoor, vector<string> activities) // finding node similar to you
     {
-        similarNodeHelper(root, username, name, major, indoor, outdoor);
+        similarNodeHelper(root, username, name, major, indoor, outdoor, activities);
     }
     void PersonTree::searchMajorHelper(PersonNode* node, string major, string username)
     {
@@ -183,6 +205,11 @@
         {
             cout << node->outdoor[i] << endl;
         }
+        cout << "Activities Interests: ";
+        for(int i = 0; i < node->activities.size(); i++)
+        {
+            cout << node->activities[i] << endl;
+        }
         cout << endl;
     }
     void printHelper(PersonNode* node)
@@ -204,6 +231,11 @@
             for(int i = 0; i < node->outdoor.size(); i++)
             {
                 cout << node->outdoor[i] << endl;
+            }
+            cout << "Activities Interests: ";
+            for(int i = 0; i < node->activities.size(); i++)
+            {
+                cout << node->activities[i] << endl;
             }
             cout << endl;
             cout << "------------------------------------------------------" << endl;
