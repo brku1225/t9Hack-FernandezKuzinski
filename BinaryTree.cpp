@@ -24,21 +24,34 @@
         destroyNode(node);
         root = NULL;
     }
-    string PersonTree::searchTree(PersonNode* node, string name) // searching tree by name (find you in tree)
+    PersonNode* helperUsername(PersonNode* node, string username)
     {
-        string other;
         if(node == NULL)
         {
-            cout << "This name is not in the tree. Try adding yourself to the directory." << endl;
+            return node;
         }
-        if(node->name == name)
+        else if(node->username == username)
         {
-            return name;
+            return node;
         }
-        other = searchTree(node->left, name);
-        other = searchTree(node->right, name);
+        else{
+            if (username < node->username)
+            {
+                node->left = helperUsername(node->left, username);
+            }
+            if(username > node->username)
+            {
+                node->right = helperUsername(node->right, username);
+            }
+        }
+        return node;
     }
-    PersonNode* PersonTree::addtoPersonTree(PersonNode *currentNode, string username, string name, string major, vector<string> indoor, vector<string> outdoor) // adding node to tree
+    PersonNode* PersonTree::searchUsername(string username) // searching tree by name (find you in tree)
+    {
+        PersonNode* some = helperUsername(root, username);
+        return some;
+    }
+    PersonNode* addHelper(PersonNode* currentNode, string username, string name, string major, vector<string> indoor, vector<string>outdoor)
     {
         if (currentNode == NULL)
         {
@@ -55,12 +68,23 @@
         }
         if (username < currentNode->username)
         {
-            currentNode->left = addtoPersonTree(currentNode->left, username, name, major, indoor, outdoor);
+            currentNode->left = addHelper(currentNode->left, username, name, major, indoor, outdoor);
         }
         if (username > currentNode->username)
         {
-            currentNode->right = addtoPersonTree(currentNode->right, username, name, major, indoor, outdoor);
+            currentNode->right = addHelper(currentNode->right, username, name, major, indoor, outdoor);
         }
+        return currentNode;
+    }
+    PersonNode* PersonTree::addtoPersonTree(PersonNode *currentNode, string username, string name, string major, vector<string> indoor, vector<string> outdoor) // adding node to tree
+    {
+        if(root == NULL)
+        {
+            currentNode = addHelper(currentNode, username, name, major, indoor, outdoor);
+            root = currentNode;
+        }
+        currentNode = addHelper(root, username, name, major, indoor, outdoor);
+        return currentNode;
     }
     void PersonTree::similarNode(PersonNode* node, string username, string name, string major, vector<string> indoor, vector<string> outdoor) // finding node similar to you
     {
@@ -70,7 +94,9 @@
         }
         if(indoor.size() == node->indoor.size() || outdoor.size() == node->outdoor.size()) // figure something out
         {
-            printSimilarNode(node->username, node->name, node->major, node->indoor, node->outdoor);
+            cout << "The following individual has similar interests to you!" << endl;
+            cout << "------------------------------------------------------" << endl;
+            printSimilarNode(node);
         }
         else{
             if(node->username > username)
@@ -83,22 +109,21 @@
             }
         }
     }
-    void PersonTree::printSimilarNode(string username, string name, string major, vector<string> indoor, vector<string> outdoor) // printing node info
+    void PersonTree::printSimilarNode(PersonNode* node) // printing node info
     {
-        cout << "The following individual has similar interests to you!" << endl;
-        cout << "------------------------------------------------------" << endl;
-        cout << "Username: " << username << endl;
-        cout << "Name: " << name << endl;
-        cout << "Major:" << major << endl;
+        cout << "Username: " << node->username << endl;
+        cout << "Name: " << node->name << endl;
+        cout << "Major:" << node->major << endl;
         cout << "Indoor Interests: ";
-        for(int i = 0; i < indoor.size(); i++)
+        for(int i = 0; i < node->indoor.size(); i++)
         {
-            cout << indoor[i] << endl;
+            cout << node->indoor[i] << endl;
         }
         cout << "Outdoor Interests: ";
-        for(int i = 0; i < outdoor.size(); i++)
+        for(int i = 0; i < node->outdoor.size(); i++)
         {
-            cout << outdoor[i] << endl;
+            cout << node->outdoor[i] << endl;
         }
+        cout << endl;
         cout << "------------------------------------------------------" << endl;
     }
