@@ -55,14 +55,12 @@
     {
         if (currentNode == NULL)
         {
-            PersonNode *person = new PersonNode;
+            PersonNode *person = new PersonNode();
             person->username = username;
             person->name = name;
             person->major = major;
             person->indoor = indoor;
             person->outdoor = outdoor;
-            person->right = NULL;
-            person->left = NULL;
             currentNode = person;
             return person;
         }
@@ -76,15 +74,16 @@
         }
         return currentNode;
     }
-    PersonNode* PersonTree::addtoPersonTree(PersonNode *currentNode, string username, string name, string major, vector<string> indoor, vector<string> outdoor) // adding node to tree
+    void PersonTree::addtoPersonTree(PersonNode *currentNode, string username, string name, string major, vector<string> indoor, vector<string> outdoor) // adding node to tree
     {
         if(root == NULL)
         {
             currentNode = addHelper(currentNode, username, name, major, indoor, outdoor);
             root = currentNode;
         }
-        currentNode = addHelper(root, username, name, major, indoor, outdoor);
-        return currentNode;
+        else{
+            currentNode = addHelper(root, username, name, major, indoor, outdoor);
+        }
     }
     void PersonTree::similarNode(PersonNode* node, string username, string name, string major, vector<string> indoor, vector<string> outdoor) // finding node similar to you
     {
@@ -113,7 +112,7 @@
     {
         cout << "Username: " << node->username << endl;
         cout << "Name: " << node->name << endl;
-        cout << "Major:" << node->major << endl;
+        cout << "Major: " << node->major << endl;
         cout << "Indoor Interests: ";
         for(int i = 0; i < node->indoor.size(); i++)
         {

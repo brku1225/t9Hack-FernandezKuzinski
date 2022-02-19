@@ -1,11 +1,72 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include "BinaryTree.hpp"
 using namespace std;
+
+void bulkAdd(PersonTree &person, string fileName, string username, string name, string major, vector<string> indoor, vector<string> outdoor)
+{
+    int iterator = 0;
+    int lin = 0;
+    string line = "";
+    string sub = "";
+    ifstream file;
+    file.open(fileName);
+    if(file.is_open())
+    {
+        while(getline(file, line))
+        {
+            if(lin == 0) // skipping the first line
+            {
+                line.erase();
+                lin++;
+            }
+            else{
+                stringstream ss(line);
+                iterator = 0;
+                while(getline(ss, sub, ','))
+                {
+                    if(iterator == 0)
+                    {
+                        cout<< sub <<endl;
+                        username = sub;
+                        iterator++;
+                    }
+                    else if(iterator == 1)
+                    {
+                        name = sub;
+                        iterator++;
+                    }
+                    else if(iterator == 2)
+                    {
+                        major = sub;
+                        iterator++;
+                    }
+                    else if(sub[0] == ':')
+                    {
+                        sub.erase(0,1);
+                        indoor.push_back(sub);
+                    }
+                    else if(sub[0] == ';')
+                    {
+                        sub.erase(0,1);
+                        outdoor.push_back(sub);
+                    }
+                }
+                person.addtoPersonTree(NULL, username, name, major, indoor, outdoor);
+            }
+        }
+    }
+    else{
+        cout << "Failed to fill database." << endl;
+    }
+}
 
 int main()
 {
     PersonTree person = PersonTree();
-    PersonNode* node = NULL;
+    PersonNode* node = new PersonNode();
+    string filename = "individuals.csv";
     int count = 0;
     string some;
     string username;
@@ -13,6 +74,7 @@ int main()
     vector<string> outdoor;
     string name;
     string major;
+    bulkAdd(person, filename, username, name, major, indoor, outdoor);
     cout << "Welcome to Buffsearch, please enter the following info and we will find others like you!" << endl;
     while(count != 4)
     {
@@ -32,10 +94,12 @@ int main()
             {
                 cout << "User does not exist." << endl;
             }
-            cout << "----------- Profile------------" << endl;
-            person.printSimilarNode(node);
+            else{
+                cout << "----------- Profile------------" << endl;
+                person.printSimilarNode(node);
+            }
         break;
-        case 2:cout << "Enter a Username:";
+        case 2:cout << "Enter a Username: ";
             cin >> username;
             /*while(node == NULL)
             {
@@ -81,7 +145,10 @@ int main()
                 }
             }while(some != "n");
             person.addtoPersonTree(NULL, username, name, major, indoor, outdoor);
-            cout << "Your User has been added to the directory!" << endl;
+            if(node != NULL)
+            {
+                cout << "Your User has been added to the directory!" << endl;
+            }
         break;
         case 3: cout << "Enter a Username: ";
             cin >> username;
