@@ -34,15 +34,13 @@
         {
             return node;
         }
-        else{
-            if (username < node->username)
-            {
-                node->left = helperUsername(node->left, username);
-            }
-            if(username > node->username)
-            {
-                node->right = helperUsername(node->right, username);
-            }
+        else if (username < node->username)
+        {
+            node = helperUsername(node->left, username);
+        }
+        else if(username > node->username)
+        {
+            node = helperUsername(node->right, username);
         }
         return node;
     }
@@ -51,39 +49,33 @@
         PersonNode* some = helperUsername(root, username);
         return some;
     }
-    PersonNode* addHelper(PersonNode* currentNode, string username, string name, string major, vector<string> indoor, vector<string>outdoor)
+    PersonNode* addHelper(PersonNode* node, string username, string name, string major, vector<string> indoor, vector<string>outdoor)
     {
-        if (currentNode == NULL)
+        if(node == NULL)
         {
-            PersonNode *person = new PersonNode();
+            PersonNode* person = new PersonNode;
             person->username = username;
             person->name = name;
             person->major = major;
             person->indoor = indoor;
             person->outdoor = outdoor;
-            currentNode = person;
+            person->left = NULL;
+            person->right = NULL;
             return person;
         }
-        if (username < currentNode->username)
+        else if(username < node->username)
         {
-            currentNode->left = addHelper(currentNode->left, username, name, major, indoor, outdoor);
+            node->left = addHelper(node->left, username, name, major, indoor, outdoor);
         }
-        if (username > currentNode->username)
+        else if(username > node->username)
         {
-            currentNode->right = addHelper(currentNode->right, username, name, major, indoor, outdoor);
+            node->right = addHelper(node->right, username, name, major, indoor, outdoor);
         }
-        return currentNode;
+        return node;
     }
-    void PersonTree::addtoPersonTree(PersonNode *currentNode, string username, string name, string major, vector<string> indoor, vector<string> outdoor) // adding node to tree
+    void PersonTree::addtoPersonTree(string username, string name, string major, vector<string> indoor, vector<string> outdoor) // adding node to tree
     {
-        if(root == NULL)
-        {
-            currentNode = addHelper(currentNode, username, name, major, indoor, outdoor);
-            root = currentNode;
-        }
-        else{
-            currentNode = addHelper(root, username, name, major, indoor, outdoor);
-        }
+        root = addHelper(root, username, name, major, indoor, outdoor);
     }
     void PersonTree::similarNode(PersonNode* node, string username, string name, string major, vector<string> indoor, vector<string> outdoor) // finding node similar to you
     {
@@ -125,4 +117,34 @@
         }
         cout << endl;
         cout << "------------------------------------------------------" << endl;
+    }
+    void printHelper(PersonNode* node)
+    {
+        if(node == NULL)
+        {
+            return;
+        }
+        else{
+            cout << "Username: " << node->username << endl;
+            cout << "Name: " << node->name << endl;
+            cout << "Major: " << node->major << endl;
+            cout << "Indoor Interests: ";
+            for(int i = 0; i < node->indoor.size(); i++)
+            {
+                cout << node->indoor[i] << endl;
+            }
+            cout << "Outdoor Interests: ";
+            for(int i = 0; i < node->outdoor.size(); i++)
+            {
+                cout << node->outdoor[i] << endl;
+            }
+            cout << endl;
+            cout << "------------------------------------------------------" << endl;
+        }
+        printHelper(node->left);
+        printHelper(node->right);
+    }
+    void PersonTree::print()
+    {
+        printHelper(root);
     }

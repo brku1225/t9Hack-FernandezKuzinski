@@ -28,7 +28,6 @@ void bulkAdd(PersonTree &person, string fileName, string username, string name, 
                 {
                     if(iterator == 0)
                     {
-                        cout<< sub <<endl;
                         username = sub;
                         iterator++;
                     }
@@ -53,7 +52,12 @@ void bulkAdd(PersonTree &person, string fileName, string username, string name, 
                         outdoor.push_back(sub);
                     }
                 }
-                person.addtoPersonTree(NULL, username, name, major, indoor, outdoor);
+                person.addtoPersonTree(username, name, major, indoor, outdoor);
+                while(!indoor.empty() && !outdoor.empty())
+                {
+                    indoor.pop_back();
+                    outdoor.pop_back();
+                }
             }
         }
     }
@@ -65,7 +69,7 @@ void bulkAdd(PersonTree &person, string fileName, string username, string name, 
 int main()
 {
     PersonTree person = PersonTree();
-    PersonNode* node = new PersonNode();
+    PersonNode* node = new PersonNode;
     string filename = "individuals.csv";
     int count = 0;
     string some;
@@ -76,13 +80,14 @@ int main()
     string major;
     bulkAdd(person, filename, username, name, major, indoor, outdoor);
     cout << "Welcome to Buffsearch, please enter the following info and we will find others like you!" << endl;
-    while(count != 4)
+    while(count != 5)
     {
         cout << endl;
         cout << "1. Search for User" << endl;
         cout << "2. Add User" << endl;
         cout << "3. Find Similar Users" << endl;
-        cout << "4. Exit" << endl;
+        cout << "4. Show all Users" << endl;
+        cout << "5. Exit" << endl;
         cin >> count;
         cout << endl;
         switch (count)
@@ -95,7 +100,7 @@ int main()
                 cout << "User does not exist." << endl;
             }
             else{
-                cout << "----------- Profile------------" << endl;
+                cout << "----------- Profile ------------" << endl;
                 person.printSimilarNode(node);
             }
         break;
@@ -144,7 +149,7 @@ int main()
                     outdoor.push_back(some);
                 }
             }while(some != "n");
-            person.addtoPersonTree(NULL, username, name, major, indoor, outdoor);
+            person.addtoPersonTree(username, name, major, indoor, outdoor);
             if(node != NULL)
             {
                 cout << "Your User has been added to the directory!" << endl;
@@ -160,7 +165,9 @@ int main()
             else{
                 person.similarNode(NULL, node->username, node->name, node->major, node->indoor, node->outdoor);
             }
-        case 4: cout << "Thanks for using our services, we will now proceed to hack your computer. Have a lovely day!" << endl;
+        case 4: person.print();
+        break;
+        case 5: cout << "Thanks for using our services, we will now proceed to hack your computer. Have a lovely day!" << endl;
             cout << endl;
         break;
 
