@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <string>
 #include "BinaryTree.hpp"
 #include "Activities.hpp"
 using namespace std;
@@ -9,7 +10,7 @@ void bulkAdd(ActTree &tree, PersonTree &person, string fileName, string username
 {
     int iterator = 0;
     int lin = 0;
-    PersonNode* other;
+    //PersonNode* other = new PersonNode;
     string line = "";
     string sub = "";
     ifstream file;
@@ -60,15 +61,14 @@ void bulkAdd(ActTree &tree, PersonTree &person, string fileName, string username
                     }
                 }
                 person.addtoPersonTree(username, name, major, indoor, outdoor, activities);
-                other = person.searchUsername(username);
-                // if(!activities.empty())
-                // {
-                //     for(int l = 0; l < activities.size(); l++)
-                //     {
-                //         tree.joinAct(activities[l], other);
-                //         cout << "good" << endl;
-                //     }
-                // }
+                PersonNode *other = person.searchUsername(username);
+                if(!activities.empty() && other != NULL)
+                {
+                    for(int l = 0; l < activities.size(); l++)
+                    {
+                        tree.joinAct(activities[l], other);
+                    }
+                }
                 while(!indoor.empty() && !outdoor.empty() && !activities.empty())
                 {
                     indoor.pop_back();

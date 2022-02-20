@@ -87,8 +87,10 @@ void ActTree::printAct(ActNode* node)
 void ActTree::joinAct(string act, PersonNode* some)
 {
     ActNode* node = findHelper(root, act);
-    node->attendees.push_back(some);
-    cout << "better" << endl;
+    if(node != NULL)
+    {
+        node->attendees.push_back(some);
+    }
 }
 void printHelper(ActNode* node)
     {
