@@ -1,2 +1,2 @@
 # t9Hack-FernandezKuzinski
-I love you brady
+Thank you for the help T9 Hackathon and Brady Kuzinski for the advice and helping guide me to a product within 24 hours!
